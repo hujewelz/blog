@@ -1,0 +1,12 @@
+<%- partial('_partial/article', {post: page, index: false}) %>
+<% if ( (is_post()) ) { %>
+<script src="<%- url_for('js/prettify.js') %>"></script>
+<script>
+    var prettifyel = document.querySelectorAll('pre');
+    for (var i = 0; i < (prettifyel || []).length; i += 1) {
+        prettifyel[i].classList.add('prettyprint');
+        // prettifyel[i].classList.add('linenums');
+    }
+    prettyPrint();
+</script>
+<% } %>
