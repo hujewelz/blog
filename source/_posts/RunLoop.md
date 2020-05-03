@@ -18,7 +18,7 @@ keywords:
 5. RunLoop 的实际应用举例
 
 
-<!-- excerpt -->
+<!-- more -->
 
 本文并不是一篇个人博客，只是对 RunLoop 知识的一个整理，方便自己查阅。点击[这里](http://www.cocoachina.com/ios/20150601/11970.html)可以查看原文。
 <!-- toc -->
