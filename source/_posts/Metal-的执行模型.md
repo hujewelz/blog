@@ -28,7 +28,7 @@ categories: 图形学
 
 <img src="https://developer.apple.com/library/archive/documentation/Miscellaneous/Conceptual/MetalProgrammingGuide/Art/Cmd-Model-1_2x.png" style="width: 80%" />
 
-## Device 对象代表了 GPU
+# Device 对象代表了 GPU
 
 一个 `MTLDevice` 对象代表了一个能执行命令的 GPU。`MTLDevice` 协议提供了用于创建命令队列、从内存中分配缓冲区、创建纹理和查询设备功能的方法。调用 `MTLCreateSystemDefaultDevice` 函数可以获取系统上的首选系统设备。
 
@@ -37,7 +37,7 @@ let device = MTLCreateSystemDefaultDevice()
 ```
 
 
-## 临时对象和非临时对象
+# 临时对象和非临时对象
 
 在 Metal 中一些对象是临时的和极度轻量的。而其他的对象使用起来则代价更高，而且可以持续很长时间，可能是整个应用程序的生命周期。
 
@@ -55,14 +55,14 @@ let device = MTLCreateSystemDefaultDevice()
 * 深度/模板状态 (Depth/stencil states)
 
 
-## 命令队列
+# 命令队列
 
 命令队列接受 GPU 将执行的命令缓冲区的有序列表。发送到单个队列的所有命令缓冲区都会按照它们入队的顺序来执行。通常，命令队列是线程安全的，允许同时对多个活动命令缓冲区进行编码。
 
 我们可以调用 `MTLDevice` 对象的 `newCommandQueue` 方法或者 `newCommandQueueWithMaxCommandBufferCount` 方法来创建一个命令队列。通常，命令队列的寿命很长，因此不应重复创建和销毁它们。
 
 
-## 命令缓冲区
+# 命令缓冲区
 
 命令缓冲区存储已编码的命令，直到缓冲区被提交以供 GPU 执行为止。一个命令缓冲区可以包含许多不同类型的已编码的命令，具体取决于用于构建该命令缓冲区的编码器的数量和类型。在典型的应用程序中，即使整个渲染帧涉及多个渲染过程、计算处理功能或 blit 操作，整个渲染帧也会被编码到单个命令缓冲区中。
 
@@ -71,14 +71,14 @@ let device = MTLCreateSystemDefaultDevice()
 命令缓冲区还表示应用程序唯一可独立跟踪的工作单元，它们定义了 Metal 内存模型建立的一致性边界，详见资源对象：缓冲区和纹理。
 
 
-### 创建命令缓冲区
+## 创建命令缓冲区
 
 我们使用 `MTLCommandQueue` 的 `commandBuffer` 方法来创建 `MTLCommandBuffer` 对象。`MTLCommandBuffer` 对象只能提交到创建它的 `MTLCommandQueue` 对象中。
 
 由 `commandBuffer` 方法创建的命令缓冲区保留了执行所需的数据对于某些情况，在执行 `MTLCommandBuffer` 对象的过程中在如果要在其他位置保留这些对象，应该通过调用 `MTLCommandQueue` 的 `commandBufferWithUnretainedReferences` 方法来创建命令缓冲区。仅对性能非常关键的应用程序使用 `commandBufferWithUnretainedReferences` 方法，该方法可以确保关键对象在应用程序中的其他位置具有引用，直到命令缓冲区执行完成为止。否则，不再具有其他引用的对象可能会被提前释放，这就导致了命令缓冲区执行的结果是未定义的。
 
 
-### 执行命令
+## 执行命令
 
 `MTLCommandBuffer` 协议使用以下方法来建立命令队列中命令缓冲区的执行顺序。命令缓冲区在提交之前不会开始执行。一旦提交，命令缓冲区将按其入队的顺序执行。
 
@@ -86,7 +86,7 @@ let device = MTLCreateSystemDefaultDevice()
 * `commit` 方法使命令缓冲区尽可能快地执行，但是仍然必须在同一命令队列中排在它前面的已提交的命令缓冲区之后执行。如果命令缓冲区先前尚未入队，则 `commit` 会进行隐式入队调用。
 
 
-### 为命令缓冲区的执行注册处理代码块
+## 为命令缓冲区的执行注册处理代码块
 
 下面列出的 `MTLCommandBuffer` 的方法用于监视命令执行。调度和完成处理程序会按照执行顺序在未定义的线程上被调用。在这些处理程序中不应该进行耗时的操作；如果需要执行耗时或阻塞的操作，应该将该操作放到另一个线程执行。
 
@@ -101,11 +101,11 @@ let device = MTLCreateSystemDefaultDevice()
 `presentDrawable:` 方法是完成处理程序的特例。这种方便的方法用于在命令缓冲区被调度时展示可显示资源（`CAMetalDrawable` 对象）的内容。
 
 
-## 命令编码器
+# 命令编码器
 
 命令编码器是一个临时对象，我们使用它以 GPU 可以执行的格式将命令和状态写入单个命令缓冲区。许多命令编码器对象方法将命令附加到命令缓冲区。当命令编码器处于活动状态时，它有就可以为其命令缓冲区附加命令。完成命令编码后，调用 `endEncoding` 方法。要编写更多命令，可以创建新的命令编码器。
 
-### 创建命令编码器对象
+## 创建命令编码器对象
 
 因为命令编码器将命令附加到特定的命令缓冲区中，所以可以通过从要与之一起使用的 `MTLCommandBuffer` 对象来请求创建一个命令编码器。我们可以使用下面的 `MTLCommandBuffer` 对象的方法创建各种类型的命令编码器：
 
@@ -114,7 +114,7 @@ let device = MTLCreateSystemDefaultDevice()
 * `blitCommandEncoder` 方法为内存操作创建 `MTLBlitCommandEncoder` 对象。
 * `parallelRenderCommandEncoderWithDescriptor:` 方法创建一个 `MTLParallelRenderCommandEncoder` 对象，该对象允许多个 `MTLRenderCommandEncoder` 对象在不同线程上运行，同时仍然渲染到共享的 `MTLRenderPassDescriptor` 中指定的附件上。
 
-### 渲染命令编码器 (Render Command Encoder)
+## 渲染命令编码器 (Render Command Encoder)
 
 图形渲染可以通过渲染过程来描述。`MTLRenderCommandEncoder` 对象表示与单个渲染过程关联的渲染状态和绘图命令。`MTLRenderCommandEncoder` 需要关联的 `MTLRenderPassDescriptor`，其中包括用作渲染命令目标的颜色，深度和模板附件。`MTLRenderCommandEncoder` 具有以下方法：
 
@@ -123,15 +123,15 @@ let device = MTLCreateSystemDefaultDevice()
 * 指定固定功能的状态，包括视口，三角形填充模式，剪刀矩形，深度和模板测试以及一些其他的值。
 * 绘制 3D 图元。
 
-### 计算命令编码器 (Compute Command Encoder)
+## 计算命令编码器 (Compute Command Encoder)
 
 对于数据并行计算，`MTLComputeCommandEncoder` 协议提供了对命令缓冲区中的命令进行编码的方法，这些命令可以指定计算函数及其参数（例如，纹理，缓冲区和采样器状态），并分派计算函数以执行。要创建计算命令编码器对象，可以使用 `MTLCommandBuffer` 的 `computeCommandEncoder` 方法。
 
-### Blit 命令编码器 (Blit Command Encoder)
+## Blit 命令编码器 (Blit Command Encoder)
 
 `MTLBlitCommandEncoder` 协议具有在缓冲区（MTLBuffer）和纹理（MTLTexture）之间进行内存复制操作的方法。`MTLBlitCommandEncoder` 协议还提供了用纯色填充纹理和生成 mipmap 的方法。可以使用 `MTLCommandBuffer` 的 `blitCommandEncoder` 方法来创建 Blit 命令编码器对象。
 
-## 多线程、命令缓冲区和命令编码器
+# 多线程、命令缓冲区和命令编码器
 
 大多数应用程序使用单个线程在单个命令缓冲区中对单个帧的渲染命令进行编码。在每个帧的末尾，提交了命令缓冲区，然后就开始调度和执行命令。
 
