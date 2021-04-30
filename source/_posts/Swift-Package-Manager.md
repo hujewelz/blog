@@ -1,7 +1,7 @@
 ---
 title: Swift Package Manager
 date: 2019-08-24 10:57:03
-tags:
+tags: SPM
 categories: Swift
 ---
 

@@ -1,7 +1,9 @@
 ---
 title: Swift 与 C 混编的正确姿势
 date: 2020-05-08 12:04:03
-tags: Swift, SPM
+tags: 
+  - Swift
+  - SPM
 categories: Swift
 ---
 
@@ -180,8 +182,8 @@ module Cglfw [system] {
 
 ```swift
 .target(
-	name: "Sample",
-  dependencies: ["OpenGLApp"]),
+	  name: "Sample",
+    dependencies: ["OpenGLApp"]),
 ```
 
 我在 `main.siwft` 中调用了自己封装的 OpenGLApp 的 Swift 库：
@@ -195,7 +197,7 @@ app.run()
 
 > SPM 会将包含有 main.swift 文件的目标作为可执行文件目标。所以我们在用 SPM 开发库时，库文件中不要有 main.swift 文件，否则的话，SPM 会将该目标作为可执行文件而不是一个库，这样就无法正确地和其他库或可执行文件进行链接了。
 
-如果我们继续在终端中执行 `swift run` 命令，这时 SPM 就会构建并执行这个应用程序。
+如果我们继续在终端中执行 `swift run` 命令，这时 SPM 就会构建并执行这个应用程序（你可以从[这里](https://gist.github.com/hujewelz/a3b45373726f9c406f23421cb5853edc) 找到着色器的代码，[这里](https://gist.github.com/hujewelz/bab7120348da8d568da5ff95bd376185)找到初始化顶点数据的代码）。
 
 ![Hello,window](https://cdn.jsdelivr.net/gh/hujewelz/CDN-for-myblog/images/swiftc/window.png)
 

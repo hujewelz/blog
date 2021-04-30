@@ -67,7 +67,7 @@ Plugins:
   - hexo-generator-feed
   - hexo-generator-sitemap
 ## Themes: https://hexo.io/themes/
-theme: next #tranquilpeak #landscape #
+theme: next #tranquilpeak # landscape
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
